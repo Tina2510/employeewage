@@ -16,7 +16,7 @@ public class EmpWageMain {
         int empCheck = checkAttendance();
         int dailyWage = (empCheck == 1) ? WAGE_PER_HOUR * FULL_DAY_HOUR : 0;
 
-        System.out.println("UC2 → Daily Wage: " + dailyWage);
+        System.out.println("Daily Wage: " + dailyWage);
         return dailyWage;
     }
     public static int computePartTimeWage() {
@@ -68,8 +68,52 @@ public class EmpWageMain {
             totalWage += wage;
         }
 
-        System.out.println("UC5 → Monthly Wage (20 Days): " + totalWage);
+        System.out.println("Monthly Wage (20 Days): " + totalWage);
         return totalWage;
+    }
+
+    public static int computeWageTillCondition() {
+
+        int totalHours = 0;
+        int totalDays = 0;
+        int totalWage = 0;
+
+        while (totalHours <= 100 && totalDays < 20) {
+
+            Random rand = new Random();
+            int empCheck = rand.nextInt(3);
+
+            int hours = 0;
+
+            switch (empCheck) {
+                case FULL_TIME:
+                    hours = FULL_DAY_HOUR;
+                    break;
+
+                case PART_TIME:
+                    hours = PART_TIME_HOUR;
+                    break;
+
+                default:
+                    hours = 0;
+            }
+
+            totalHours += hours;
+            totalWage += hours * WAGE_PER_HOUR;
+            totalDays++;
+        }
+
+        System.out.println("Total Wage (100Hrs or 20 Days): " + totalWage);
+        return totalWage;
+    }
+
+
+    public static void main(String[] args) {
+        computeDailyWage();
+        computePartTimeWage();
+        computeWageUsingSwitch();
+        computeWageForMonth();
+        computeWageTillCondition();
     }
 
 
