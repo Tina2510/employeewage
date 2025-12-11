@@ -60,6 +60,17 @@ public class EmpWageMain {
 
         return wage;
     }
+    public static int computeWageForMonth() {
+        int totalWage = 0;
+
+        for (int day = 1; day <= 20; day++) {
+            int wage = computeWageUsingSwitch();
+            totalWage += wage;
+        }
+
+        System.out.println("UC5 → Monthly Wage (20 Days): " + totalWage);
+        return totalWage;
+    }
 
 
 }
