@@ -1,63 +1,63 @@
 import java.util.Random;
 
-public class EmpWageBuilder {
+public class EmpWageBuilder implements IComputeEmpWage {
 
-    private final int FULL_TIME = 1;
-    private final int PART_TIME = 2;
-
-    private CompanyEmpWage[] companyEmpWages;
-    private int companyCount = 0;
+    private CompanyEmpWage[] companyEmpArray;
+    private int index;
     private Random rand;
 
-
-    public EmpWageBuilder(int maxCompanies) {
-        companyEmpWages = new CompanyEmpWage[maxCompanies];
+    public EmpWageBuilder(int companyCount) {
+        companyEmpArray = new CompanyEmpWage[companyCount];
+        index = 0;
         rand = new Random();
     }
 
-
+    @Override
     public void addCompanyEmpWage(String companyName, int wagePerHour, int workingDays, int maxHours) {
-        companyEmpWages[companyCount++] = new CompanyEmpWage(companyName, wagePerHour, workingDays, maxHours);
+        companyEmpArray[index++] = new CompanyEmpWage(companyName, wagePerHour, workingDays, maxHours);
     }
 
 
-    private int getWorkingHours(int empCheck) {
-        switch (empCheck) {
-            case FULL_TIME: return 8;
-            case PART_TIME: return 8;
-            default: return 0;
-        }
-    }
+    private int computeWage(CompanyEmpWage company) {
 
-    public void computeWages() {
-        for (int i = 0; i < companyCount; i++) {
-            CompanyEmpWage company = companyEmpWages[i];
-            int totalHours = 0;
-            int totalDays = 0;
-            int totalWage = 0;
+        int totalHours = 0;
+        int totalDays = 0;
 
-            while (totalHours < company.maxHours && totalDays < company.workingDays) {
-                int empCheck = rand.nextInt(3);
-                int hoursWorked = getWorkingHours(empCheck);
-                totalHours += hoursWorked;
-                totalWage += hoursWorked * company.wagePerHour;
-                totalDays++;
+        while (totalHours < company.maxHours && totalDays < company.workingDays) {
+
+            int empCheck = rand.nextInt(3);
+            int hours = 0;
+
+            switch (empCheck) {
+                case 1: hours = 8; break;
+                case 2: hours = 4; break;
+                default: hours = 0;
             }
 
-            company.setTotalWage(totalWage);
+            totalHours += hours;
+            totalDays++;
+        }
+
+        return totalHours * company.wagePerHour;
+    }
+
+    @Override
+    public void computeWages() {
+        for (int i = 0; i < index; i++) {
+            CompanyEmpWage company = companyEmpArray[i];
+            int totalWage = computeWage(company);
+            company.totalWage = totalWage;
             System.out.println(company);
         }
     }
 
-
     public static void main(String[] args) {
-        EmpWageBuilder empWageBuilder = new EmpWageBuilder(5); // can manage up to 5 companies
 
+        IComputeEmpWage empWageBuilder = new EmpWageBuilder(5);
 
         empWageBuilder.addCompanyEmpWage("TCS", 20, 20, 100);
         empWageBuilder.addCompanyEmpWage("Infosys", 25, 22, 120);
         empWageBuilder.addCompanyEmpWage("Wipro", 30, 18, 90);
-
 
         empWageBuilder.computeWages();
     }
