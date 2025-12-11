@@ -19,4 +19,23 @@ public class EmpWageMain {
         System.out.println("UC2 → Daily Wage: " + dailyWage);
         return dailyWage;
     }
+    public static int computePartTimeWage() {
+        Random rand = new Random();
+        int empCheck = rand.nextInt(3);  // 0,1,2
+
+        int hours = 0;
+
+        if (empCheck == FULL_TIME) {
+            hours = FULL_DAY_HOUR;
+        } else if (empCheck == PART_TIME) {
+            hours = PART_TIME_HOUR;
+        }
+
+        int wage = WAGE_PER_HOUR * hours;
+        System.out.println("Wage with Full-time/Part-time: " + wage);
+
+        return wage;
+    }
+
+
 }
