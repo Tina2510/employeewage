@@ -12,4 +12,11 @@ public class EmpWageMain {
         System.out.println("Employee is: " + (empCheck == 1 ? "Present" : "Absent"));
         return empCheck;
     }
+    public static int computeDailyWage() {
+        int empCheck = checkAttendance();
+        int dailyWage = (empCheck == 1) ? WAGE_PER_HOUR * FULL_DAY_HOUR : 0;
+
+        System.out.println("UC2 → Daily Wage: " + dailyWage);
+        return dailyWage;
+    }
 }
