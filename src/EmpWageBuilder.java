@@ -5,13 +5,19 @@ public class EmpWageBuilder {
     private final int FULL_TIME = 1;
     private final int PART_TIME = 2;
 
-    private CompanyEmpWage companyEmpWage;
+    private CompanyEmpWage[] companyEmpWages;
+    private int companyCount = 0;
     private Random rand;
 
 
-    public EmpWageBuilder(CompanyEmpWage companyEmpWage) {
-        this.companyEmpWage = companyEmpWage;
-        this.rand = new Random();
+    public EmpWageBuilder(int maxCompanies) {
+        companyEmpWages = new CompanyEmpWage[maxCompanies];
+        rand = new Random();
+    }
+
+
+    public void addCompanyEmpWage(String companyName, int wagePerHour, int workingDays, int maxHours) {
+        companyEmpWages[companyCount++] = new CompanyEmpWage(companyName, wagePerHour, workingDays, maxHours);
     }
 
 
@@ -23,40 +29,36 @@ public class EmpWageBuilder {
         }
     }
 
+    public void computeWages() {
+        for (int i = 0; i < companyCount; i++) {
+            CompanyEmpWage company = companyEmpWages[i];
+            int totalHours = 0;
+            int totalDays = 0;
+            int totalWage = 0;
 
-    public void computeWage() {
-        int totalHours = 0;
-        int totalDays = 0;
-        int totalWage = 0;
+            while (totalHours < company.maxHours && totalDays < company.workingDays) {
+                int empCheck = rand.nextInt(3);
+                int hoursWorked = getWorkingHours(empCheck);
+                totalHours += hoursWorked;
+                totalWage += hoursWorked * company.wagePerHour;
+                totalDays++;
+            }
 
-        while (totalHours < companyEmpWage.maxHours && totalDays < companyEmpWage.workingDays) {
-            int empCheck = rand.nextInt(3);
-            int hoursWorked = getWorkingHours(empCheck);
-            totalHours += hoursWorked;
-            totalWage += hoursWorked * companyEmpWage.wagePerHour;
-            totalDays++;
+            company.setTotalWage(totalWage);
+            System.out.println(company);
         }
-
-
-        companyEmpWage.setTotalWage(totalWage);
-        System.out.println(companyEmpWage);
     }
 
 
     public static void main(String[] args) {
-
-        CompanyEmpWage tcs = new CompanyEmpWage("TCS", 20, 20, 100);
-        CompanyEmpWage infosys = new CompanyEmpWage("Infosys", 25, 22, 120);
-        CompanyEmpWage wipro = new CompanyEmpWage("Wipro", 30, 18, 90);
+        EmpWageBuilder empWageBuilder = new EmpWageBuilder(5); // can manage up to 5 companies
 
 
-        EmpWageBuilder empTCS = new EmpWageBuilder(tcs);
-        EmpWageBuilder empInfosys = new EmpWageBuilder(infosys);
-        EmpWageBuilder empWipro = new EmpWageBuilder(wipro);
+        empWageBuilder.addCompanyEmpWage("TCS", 20, 20, 100);
+        empWageBuilder.addCompanyEmpWage("Infosys", 25, 22, 120);
+        empWageBuilder.addCompanyEmpWage("Wipro", 30, 18, 90);
 
 
-        empTCS.computeWage();
-        empInfosys.computeWage();
-        empWipro.computeWage();
+        empWageBuilder.computeWages();
     }
 }
