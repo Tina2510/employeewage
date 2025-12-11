@@ -17,7 +17,7 @@ public class EmpWageBuilder {
     public int computeDailyWage() {
         int empCheck = rand.nextInt(2); // 0 or 1
         int wage = (empCheck == 1) ? FULL_DAY_HOUR * WAGE_PER_HOUR : 0;
-        System.out.println("UC7 → Daily Wage = " + wage);
+        System.out.println("Daily Wage = " + wage);
         return wage;
     }
 
@@ -27,7 +27,7 @@ public class EmpWageBuilder {
         int hours = (empCheck == FULL_TIME) ? FULL_DAY_HOUR :
                 (empCheck == PART_TIME) ? PART_TIME_HOUR : 0;
         int wage = hours * WAGE_PER_HOUR;
-        System.out.println("UC7 → Part-Time/Full-Time Wage = " + wage);
+        System.out.println("Part-Time/Full-Time Wage = " + wage);
         return wage;
     }
     public int computeWageUsingSwitch() {
@@ -41,7 +41,7 @@ public class EmpWageBuilder {
         }
 
         int wage = hours * WAGE_PER_HOUR;
-        System.out.println("UC7 → Wage using Switch = " + wage);
+        System.out.println("Wage using Switch = " + wage);
         return wage;
     }
 
@@ -50,7 +50,7 @@ public class EmpWageBuilder {
         for(int day=1; day<=MAX_DAYS; day++){
             totalWage += computeWageUsingSwitch();
         }
-        System.out.println("UC7 → Total Wage for Month = " + totalWage);
+        System.out.println("Total Wage for Month = " + totalWage);
         return totalWage;
     }
 
@@ -68,7 +68,7 @@ public class EmpWageBuilder {
             totalWage += hours * WAGE_PER_HOUR;
             totalDays++;
         }
-        System.out.println("UC7 → Total Wage till Condition = " + totalWage);
+        System.out.println(" Total Wage till Condition = " + totalWage);
         return totalWage;
     }
 
