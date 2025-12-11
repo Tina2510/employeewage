@@ -36,6 +36,30 @@ public class EmpWageMain {
 
         return wage;
     }
+    public static int computeWageUsingSwitch() {
+        Random rand = new Random();
+        int empCheck = rand.nextInt(3);  // 0,1,2
+
+        int hours = 0;
+
+        switch (empCheck) {
+            case FULL_TIME:
+                hours = FULL_DAY_HOUR;
+                break;
+
+            case PART_TIME:
+                hours = PART_TIME_HOUR;
+                break;
+
+            default:
+                hours = 0;
+        }
+
+        int wage = WAGE_PER_HOUR * hours;
+        System.out.println("Wage using Switch: " + wage);
+
+        return wage;
+    }
 
 
 }
