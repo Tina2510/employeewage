@@ -1,10 +1,13 @@
+
 import java.util.ArrayList;
+
 import java.util.HashMap;
 
 public class EmpWageBuilder implements IComputeEmpWage {
 
     public static final int IS_FULL_TIME = 1;
     public static final int IS_PART_TIME = 2;
+
 
     private ArrayList<CompanyEmpWage> companyEmpWageList;
     private HashMap<String, Integer> companyToTotalWageMap;
@@ -14,16 +17,27 @@ public class EmpWageBuilder implements IComputeEmpWage {
     public EmpWageBuilder() {
         companyEmpWageList = new ArrayList<>();
         companyToTotalWageMap = new HashMap<>();
+
+    private HashMap<String, CompanyEmpWage> companyMap;
+
+    public EmpWageBuilder() {
+        companyMap = new HashMap<>();
+
     }
 
     @Override
     public void addCompany(String name, int wagePerHour, int workingDays, int maxHours) {
         CompanyEmpWage company = new CompanyEmpWage(name, wagePerHour, workingDays, maxHours);
+
         companyEmpWageList.add(company);
+
+        companyMap.put(name, company);
+
     }
 
     @Override
     public void computeWages() {
+
         for (CompanyEmpWage company : companyEmpWageList) {
             int totalWage = computeEmpWage(company);
             company.setTotalWage(totalWage);
@@ -56,5 +70,52 @@ public class EmpWageBuilder implements IComputeEmpWage {
             case IS_PART_TIME: return 4;
             default: return 0;
         }
+
+        for (CompanyEmpWage company : companyMap.values()) {
+            int totalWage = computeEmpWage(company);
+            company.setTotalWage(totalWage);
+        }
     }
+
+    private int computeEmpWage(CompanyEmpWage company) {
+        int totalHours = 0;
+        int totalDays = 0;
+
+        while (totalHours <= company.maxHours && totalDays < company.workingDays) {
+            totalDays++;
+            int empHrs = getEmpHours();
+            totalHours += empHrs;
+        }
+
+        return totalHours * company.empRatePerHour;
+
+    }
+
+    private int getEmpHours() {
+        int empCheck = (int) (Math.random() * 10) % 3;
+        switch (empCheck) {
+            case IS_FULL_TIME: return 8;
+            case IS_PART_TIME: return 4;
+            default: return 0;
+        }
+    }
+
+    @Override
+    public int getTotalWage(String companyName) {
+        CompanyEmpWage company = companyMap.get(companyName);
+        return company != null ? company.totalWage : 0;
+    }
+    public class Main {
+        public static void main(String[] args) {
+            EmpWageBuilder empBuilder = new EmpWageBuilder();
+            empBuilder.addCompany("ABC", 20, 20, 100);
+            empBuilder.addCompany("XYZ", 25, 22, 120);
+
+            empBuilder.computeWages();
+
+            System.out.println("Total wage for ABC: " + empBuilder.getTotalWage("ABC"));
+            System.out.println("Total wage for XYZ: " + empBuilder.getTotalWage("XYZ"));
+        }
+    }
+
 }
