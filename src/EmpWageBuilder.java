@@ -1,64 +1,68 @@
-import java.util.Random;
+import java.util.HashMap;
 
 public class EmpWageBuilder implements IComputeEmpWage {
 
-    private CompanyEmpWage[] companyEmpArray;
-    private int index;
-    private Random rand;
+    public static final int IS_FULL_TIME = 1;
+    public static final int IS_PART_TIME = 2;
 
-    public EmpWageBuilder(int companyCount) {
-        companyEmpArray = new CompanyEmpWage[companyCount];
-        index = 0;
-        rand = new Random();
+    private HashMap<String, CompanyEmpWage> companyMap;
+
+    public EmpWageBuilder() {
+        companyMap = new HashMap<>();
     }
 
     @Override
-    public void addCompanyEmpWage(String companyName, int wagePerHour, int workingDays, int maxHours) {
-        companyEmpArray[index++] = new CompanyEmpWage(companyName, wagePerHour, workingDays, maxHours);
-    }
-
-
-    private int computeWage(CompanyEmpWage company) {
-
-        int totalHours = 0;
-        int totalDays = 0;
-
-        while (totalHours < company.maxHours && totalDays < company.workingDays) {
-
-            int empCheck = rand.nextInt(3);
-            int hours = 0;
-
-            switch (empCheck) {
-                case 1: hours = 8; break;
-                case 2: hours = 4; break;
-                default: hours = 0;
-            }
-
-            totalHours += hours;
-            totalDays++;
-        }
-
-        return totalHours * company.wagePerHour;
+    public void addCompany(String name, int wagePerHour, int workingDays, int maxHours) {
+        CompanyEmpWage company = new CompanyEmpWage(name, wagePerHour, workingDays, maxHours);
+        companyMap.put(name, company);
     }
 
     @Override
     public void computeWages() {
-        for (int i = 0; i < index; i++) {
-            CompanyEmpWage company = companyEmpArray[i];
-            int totalWage = computeWage(company);
-            company.totalWage = totalWage;
-            System.out.println(company);
+        for (CompanyEmpWage company : companyMap.values()) {
+            int totalWage = computeEmpWage(company);
+            company.setTotalWage(totalWage);
         }
     }
 
-    public static void main(String[] args) {
+    private int computeEmpWage(CompanyEmpWage company) {
+        int totalHours = 0;
+        int totalDays = 0;
 
-        IComputeEmpWage empWageBuilder = new EmpWageBuilder(5);
+        while (totalHours <= company.maxHours && totalDays < company.workingDays) {
+            totalDays++;
+            int empHrs = getEmpHours();
+            totalHours += empHrs;
+        }
 
-        empWageBuilder.addCompanyEmpWage("TCS", 20, 20, 100);
-        empWageBuilder.addCompanyEmpWage("Infosys", 25, 22, 120);
-        empWageBuilder.addCompanyEmpWage("Wipro", 30, 18, 90);
-
-        empWageBuilder.computeWages();
+        return totalHours * company.empRatePerHour;
     }
+
+    private int getEmpHours() {
+        int empCheck = (int) (Math.random() * 10) % 3;
+        switch (empCheck) {
+            case IS_FULL_TIME: return 8;
+            case IS_PART_TIME: return 4;
+            default: return 0;
+        }
+    }
+
+    @Override
+    public int getTotalWage(String companyName) {
+        CompanyEmpWage company = companyMap.get(companyName);
+        return company != null ? company.totalWage : 0;
+    }
+    public class Main {
+        public static void main(String[] args) {
+            EmpWageBuilder empBuilder = new EmpWageBuilder();
+            empBuilder.addCompany("ABC", 20, 20, 100);
+            empBuilder.addCompany("XYZ", 25, 22, 120);
+
+            empBuilder.computeWages();
+
+            System.out.println("Total wage for ABC: " + empBuilder.getTotalWage("ABC"));
+            System.out.println("Total wage for XYZ: " + empBuilder.getTotalWage("XYZ"));
+        }
+    }
+
 }
