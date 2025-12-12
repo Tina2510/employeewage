@@ -2,26 +2,26 @@ import java.util.ArrayList;
 
 public class CompanyEmpWage {
 
-    public final String companyName;
-    public final int wagePerHour;
-    public final int workingDays;
-    public final int maxHours;
-
+    public String companyName;
+    public int wagePerHour;
+    public int workingDays;
+    public int maxHours;
     public int totalWage;
 
 
-    public ArrayList<Integer> dailyWageList;
+    public ArrayList<Integer> dailyWageList = new ArrayList<>();
 
     public CompanyEmpWage(String companyName, int wagePerHour, int workingDays, int maxHours) {
         this.companyName = companyName;
         this.wagePerHour = wagePerHour;
         this.workingDays = workingDays;
         this.maxHours = maxHours;
-        this.dailyWageList = new ArrayList<>();
     }
 
     @Override
     public String toString() {
-        return companyName + " : Total Wage = " + totalWage + ", Daily Wages = " + dailyWageList;
+        return "Company: " + companyName +
+                " Total Wage: " + totalWage +
+                " Daily Wages: " + dailyWageList;
     }
 }
