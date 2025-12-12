@@ -48,18 +48,14 @@ public class EmpWageBuilder implements IComputeEmpWage {
         }
     }
 
+
     @Override
     public int getTotalWage(String companyName) {
         CompanyEmpWage company = companyMap.get(companyName);
         return company != null ? company.totalWage : 0;
     }
 
-    // UC13: Get detailed company info
-    public CompanyEmpWage getCompanyDetails(String companyName) {
-        return companyMap.get(companyName);
-    }
 
-    // Getter for ArrayList (for UC12-style iteration)
     public ArrayList<CompanyEmpWage> getCompanyList() {
         return companyEmpWageList;
     }
