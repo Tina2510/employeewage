@@ -32,12 +32,10 @@ public class EmpWageBuilder implements IComputeEmpWage {
     private int computeEmpWage(CompanyEmpWage company) {
         int totalHours = 0;
         int totalDays = 0;
-
         while (totalHours <= company.maxHours && totalDays < company.workingDays) {
             totalDays++;
             totalHours += getEmpHours();
         }
-
         return totalHours * company.empRatePerHour;
     }
 
@@ -56,7 +54,12 @@ public class EmpWageBuilder implements IComputeEmpWage {
         return company != null ? company.totalWage : 0;
     }
 
-    // Getter for ArrayList (for UC12 usage)
+    // UC13: Get detailed company info
+    public CompanyEmpWage getCompanyDetails(String companyName) {
+        return companyMap.get(companyName);
+    }
+
+    // Getter for ArrayList (for UC12-style iteration)
     public ArrayList<CompanyEmpWage> getCompanyList() {
         return companyEmpWageList;
     }
